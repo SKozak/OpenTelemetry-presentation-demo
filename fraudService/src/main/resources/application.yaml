@@ -1,0 +1,23 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  application:
+    name: fraud-service
+  data:
+    mongodb:
+      uri: mongodb://fraud-app:fraud-app@${INFRASTRUCTURE_HOST:127.0.0.1}:27017/fraud-service
+      database: fraud-service
+
+  cloud:
+    consul:
+      discovery:
+        enabled: true
+      host: ${INFRASTRUCTURE_HOST:127.0.0.1}
+      port: 8500
+
+logging:
+  pattern:
+    correlation: "[ %X{trace_id:-},%X{span_id:-} ] "
+
+fraudCheckServiceUrl: "http://${INFRASTRUCTURE_HOST:127.0.0.1}:9999"

@@ -1,0 +1,44 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+  hostmetrics:
+    collection_interval: 60s
+    scrapers:
+      cpu:
+      memory:
+
+processors:
+  batch:
+
+exporters:
+  otlp/elastic:
+    endpoint: http://apm-server:8200
+    tls:
+      insecure: true
+    headers:
+      # Elastic APM Server secret token
+      Authorization: "Bearer test321test"
+#  kafka: # only for testing
+#    brokers:
+#      - kafka:9092
+#    protocol_version: 2.0.0
+#    encoding: otlp_json
+#    topic: logs2
+
+
+service:
+  pipelines:
+    traces:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp/elastic ]
+    metrics:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp/elastic ]
+    logs:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp/elastic ]

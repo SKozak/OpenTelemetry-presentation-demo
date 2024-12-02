@@ -1,0 +1,16 @@
+apm-server:
+  host: apm-server:8200
+  frontend.enabled: true
+  frontend.allow_origins: "*"
+  kibana:
+    enabled: true
+    host: http://kibana:5601
+    username: elastic
+    password: kibana
+
+output.elasticsearch:
+  enabled: true
+  hosts: ["https://elasticsearch:9200"]
+  username: elastic
+  password: elastic
+  ssl.verification_mode: none

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+    <changeSet author="sebb" id="added_employment_address_document_to_client_table">
+        <addColumn tableName="client">
+            <column name="document_type" type="varchar(50)"/>
+            <column name="document_number" type="varchar(50)"/>
+            <column name="document_expiry" type="date"/>
+            <column name="employer_name" type="varchar(100)"/>
+            <column name="job_title" type="varchar(100)"/>
+            <column name="employment_type" type="varchar(50)"/>
+            <column name="employment_start_date" type="date"/>
+            <column name="street" type="varchar(255)"/>
+            <column name="city" type="varchar(100)"/>
+            <column name="state" type="varchar(100)"/>
+            <column name="zip" type="varchar(10)"/>
+            <column name="country" type="varchar(100)"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

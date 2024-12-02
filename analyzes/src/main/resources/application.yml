@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: analyzes
+  kafka:
+    streams:
+      application-id: analyzes
+      bootstrap-servers: ${INFRASTRUCTURE_HOST:127.0.0.1}:9092
+      properties:
+        commit.interval.ms : 100
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      client-id: analyzes-consumer
+      group-id: analyzes-consumer-group
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+
+    bootstrap-servers: ${INFRASTRUCTURE_HOST:127.0.0.1}:9092
+
+  data:
+    mongodb:
+      uri: mongodb://analyzes-app:analyzes-app@${INFRASTRUCTURE_HOST:127.0.0.1}:27017/analyzes
+      database: analyzes
+
+logging:
+  pattern:
+    correlation: "[ %X{trace_id:-},%X{span_id:-} ] "

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.2</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>pl.com.kozak.telemetry.creditwise</groupId>
+    <artifactId>creditwise</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>creditwise</name>
+    <description>Sample app to demonstrate Central logging, tracing and Metrics in microservices</description>
+
+    <modules>
+        <module>creditcards</module>
+        <module>identityRegistry</module>
+        <module>fraudService</module>
+        <module>analyzes</module>
+        <module>mockServer</module>
+    </modules>
+
+    <properties>
+        <java.version>21</java.version>
+        <spring-cloud.version>2023.0.0</spring-cloud.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <lombok-mapstruct-binding-version>0.2.0</lombok-mapstruct-binding-version>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <configuration>
+                        <from>
+                            <image>eclipse-temurin:21.0.3_9-jre-jammy</image>
+                            <platforms>
+                                <platform>
+                                    <architecture>arm64</architecture>
+                                    <os>linux</os>
+                                </platform>
+                            </platforms>
+                        </from>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

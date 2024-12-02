@@ -1,0 +1,102 @@
+services:
+  creditcards:
+    image: creditcards:0.0.1-SNAPSHOT
+    environment:
+      - SERVER_PORT=8081
+      - INFRASTRUCTURE_HOST=${INFRASTRUCTURE_HOST}
+      - JAVA_TOOL_OPTIONS="-javaagent:/app/WEB-INF/agent/otel-javaagent.jar"
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://${INFRASTRUCTURE_HOST}:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_METRICS_EXPORTER=otlp
+      - OTEL_METRIC_EXPORT_INTERVAL=15000
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_LOGS_EXPORTER=otlp
+      - OTEL_SERVICE_NAME=creditcards
+      - OTEL_RESOURCE_ATTRIBUTES="deployment.environment=dev"
+      - OTEL_INSTRUMENTATION_COMMON_DB_STATEMENT_SANITIZER_ENABLED=false
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./opentelemetry-javaagent-2.7.0.jar:/app/WEB-INF/agent/otel-javaagent.jar
+    networks:
+      - infra
+
+
+  fraud-service:
+    image: fraud-service:0.0.1-SNAPSHOT
+    environment:
+      - SERVER_PORT=8085
+      - INFRASTRUCTURE_HOST=${INFRASTRUCTURE_HOST}
+      - JAVA_TOOL_OPTIONS="-javaagent:/app/WEB-INF/agent/otel-javaagent.jar"
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://${INFRASTRUCTURE_HOST}:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_METRICS_EXPORTER=otlp
+      - OTEL_METRIC_EXPORT_INTERVAL=15000
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_LOGS_EXPORTER=otlp
+      - OTEL_SERVICE_NAME=fraud-service
+      - OTEL_RESOURCE_ATTRIBUTES="deployment.environment=dev"
+      - OTEL_INSTRUMENTATION_COMMON_DB_STATEMENT_SANITIZER_ENABLED=false
+    ports:
+      - "8085:8085"
+    volumes:
+      - ./opentelemetry-javaagent-2.7.0.jar:/app/WEB-INF/agent/otel-javaagent.jar
+    networks:
+      - infra
+
+  identityRegistry:
+    image: identity-registry:0.0.1-SNAPSHOT
+    environment:
+      - SERVER_PORT=8082
+      - INFRASTRUCTURE_HOST=${INFRASTRUCTURE_HOST}
+      - JAVA_TOOL_OPTIONS="-javaagent:/app/WEB-INF/agent/otel-javaagent.jar"
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://${INFRASTRUCTURE_HOST}:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_METRICS_EXPORTER=otlp
+      - OTEL_METRIC_EXPORT_INTERVAL=15000
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_LOGS_EXPORTER=otlp
+      - OTEL_SERVICE_NAME=identity-registry
+      - OTEL_RESOURCE_ATTRIBUTES="deployment.environment=dev"
+      - OTEL_INSTRUMENTATION_COMMON_DB_STATEMENT_SANITIZER_ENABLED=false
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./opentelemetry-javaagent-2.7.0.jar:/app/WEB-INF/agent/otel-javaagent.jar
+    networks:
+      - infra
+
+  analyzes:
+    image: analyzes:0.0.1-SNAPSHOT
+    environment:
+      - INFRASTRUCTURE_HOST=${INFRASTRUCTURE_HOST}
+      - JAVA_TOOL_OPTIONS="-javaagent:/app/WEB-INF/agent/otel-javaagent.jar"
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://${INFRASTRUCTURE_HOST}:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_METRICS_EXPORTER=otlp
+      - OTEL_METRIC_EXPORT_INTERVAL=15000
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_LOGS_EXPORTER=otlp
+      - OTEL_SERVICE_NAME=analyzes
+      - OTEL_RESOURCE_ATTRIBUTES="deployment.environment=dev"
+      - OTEL_INSTRUMENTATION_COMMON_DB_STATEMENT_SANITIZER_ENABLED=false
+    volumes:
+      - ./opentelemetry-javaagent-2.7.0.jar:/app/WEB-INF/agent/otel-javaagent.jar
+    networks:
+      - infra
+    depends_on:
+      - creditcards
+
+  mockserver:
+    image: mock-server
+    environment:
+      - SERVER_PORT=9999
+    ports:
+      - "9999:9999"
+    networks:
+      - infra
+
+networks:
+  infra:
+    name: shared-infra
+    external: true
